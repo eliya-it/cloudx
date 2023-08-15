@@ -1,0 +1,20 @@
+.input-box {
+  position: relative;
+  width: 100%;
+  //   grid-column: 1 / -1;
+  &__icon {
+    height: 2.8rem;
+    width: 2.8rem;
+
+    padding: 4px;
+    position: absolute;
+    box-sizing: border-box;
+    top: 55%;
+    left: 0.8rem;
+    transform: translateY(-50%);
+  }
+  &__input {
+    padding-left: 1.5rem;
+    width: 100%;
+  }
+}

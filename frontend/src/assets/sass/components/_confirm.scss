@@ -1,0 +1,6 @@
+.confirm {
+  @extend .modal;
+  &__container {
+    @extend .modal__content;
+  }
+}

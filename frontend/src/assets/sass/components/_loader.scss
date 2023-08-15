@@ -1,0 +1,23 @@
+.loader {
+  width: 6.6rem;
+  height: 6.6rem;
+  border: 5px solid var(--el-color);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 auto;
+  &--inline {
+    width: 2.6rem;
+    height: 2.6rem;
+  }
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

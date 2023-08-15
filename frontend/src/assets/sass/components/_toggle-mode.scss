@@ -1,0 +1,40 @@
+.toggle-mode {
+  @include flexCenter;
+  gap: 1rem;
+  &__btn {
+    background-color: var(--color-grey-light-4);
+    border: none;
+    width: 10rem;
+    height: 4rem;
+    border-radius: 10rem;
+    position: relative;
+    @include flexCenter;
+    justify-content: center;
+    align-items: center;
+    transition: all 450ms ease;
+    padding: 0.8rem 0.4rem;
+
+    &__circle {
+      width: 3rem;
+      height: 3rem;
+      background-color: var(--color-grey-dark-2);
+      border-radius: 50%;
+      position: absolute;
+      cursor: pointer;
+      //   top: 0;
+      //   left: 0;
+      //   left: 0;
+
+      transition: all 450ms ease;
+      &--dark {
+        transform: translateX(100%);
+      }
+      &--light {
+        transform: translateX(-100%);
+      }
+    }
+  }
+  &__icon {
+    font-size: 2.4rem;
+  }
+}

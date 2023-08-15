@@ -1,0 +1,28 @@
+.grid {
+  display: grid;
+  gap: 3.2rem;
+  &--col-2 {
+    grid-template-columns: repeat(2, 1fr);
+    @media only screen and (max-width: $bp-tab-port) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+  &--col-3 {
+    grid-template-columns: repeat(3, 1fr);
+    @media only screen and (max-width: $bp-tab-land) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media only screen and (max-width: $bp-small) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+  &--col-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  &--col-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  &--expand {
+    grid-column: 1 / -1;
+  }
+}

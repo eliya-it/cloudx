@@ -1,0 +1,29 @@
+.error {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 3.4rem 3.2rem;
+  box-shadow: 0 2rem 4rem rgba(#000, 0.1);
+  border-radius: var(--border-radius);
+  gap: 1.3rem;
+  &__heading {
+    font-size: 4.2rem;
+    color: var(--color-warn);
+    text-align: center;
+  }
+  &__text {
+    font-size: 2.2rem;
+  }
+  &__link {
+    &:link,
+    &:visited {
+      text-align: center;
+      text-decoration: none;
+      align-self: center;
+      color: var(--color-primary);
+    }
+  }
+}

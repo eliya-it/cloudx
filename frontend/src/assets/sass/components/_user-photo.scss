@@ -1,0 +1,26 @@
+.user-photo {
+  @include flexCenter;
+  gap: 3.2rem;
+  &__label {
+    padding: 1.6rem 3.2rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: var(--font-size);
+    background-color: var(--color-primary-dark-1);
+    color: var(--color-grey-light-1);
+    transition: var(--transition-primary);
+    box-shadow: 0 2rem 4rem rgba(#000, 0.1);
+    &:hover {
+      background-color: #fff;
+      color: var(--color-primary-dark-1);
+    }
+  }
+  &__input {
+    display: none;
+  }
+  &__photo {
+    width: 6.2rem;
+    height: 6.2rem;
+    border-radius: 50%;
+  }
+}

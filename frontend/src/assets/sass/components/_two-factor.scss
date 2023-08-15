@@ -1,0 +1,46 @@
+.two-factor {
+  box-shadow: 0 2rem 4rem rgba(#000, 0.1);
+  // max-width: 70rem;
+  margin: 0 auto;
+  padding: 6.4rem;
+  border-radius: var(--border-radius);
+  &__form {
+    @include flexColSpread;
+    gap: 3.2rem;
+    margin-top: 3.2rem;
+    button {
+      flex: 1;
+      text-align: center;
+    }
+  }
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3.2rem;
+    // background-color: cadetblue;
+  }
+  &__input {
+    width: 6rem;
+    height: 8rem;
+    border: 1px solid var(--color-grey-light-4);
+    border-radius: var(--border-radius);
+    text-align: center;
+    font-size: 3rem;
+    color: var(--color-grey-dark-4);
+    transition: var(--transition-primary);
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    -moz-appearance: textfield;
+    &:focus {
+      outline: none;
+      transform: scale(1.12);
+    }
+  }
+  &--form {
+    max-width: 70rem;
+  }
+}

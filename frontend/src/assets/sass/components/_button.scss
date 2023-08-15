@@ -1,0 +1,34 @@
+.btn {
+  &,
+  &:link,
+  &:visited {
+    display: flex;
+    padding: 1.2rem;
+    border-radius: var(--border-radius);
+    background-color: var(--color-primary);
+    color: var(--color-grey-light-1);
+    font-size: var(--font-size);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2rem 4rem rgba(#000, 0.1);
+    transition: var(--transition-primary);
+    font-weight: var(--font-weight-4);
+    font-family: var(--font-family);
+    text-align: center !important;
+    &:hover {
+      background-color: #fff;
+      color: var(--color-primary);
+    }
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+  &--warn {
+    background-color: var(--color-warn);
+    color: var(--color-grey-light-1);
+  }
+  &--green {
+    background-color: var(--color-granted);
+    color: var(--color-grey-light-1);
+  }
+}

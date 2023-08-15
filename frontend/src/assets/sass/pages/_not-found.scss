@@ -1,0 +1,13 @@
+.not-found {
+  @include flexCenter;
+  @include flexCol;
+  gap: 4.2rem;
+  &__icon {
+    width: 38.2rem;
+    height: 38.2rem;
+  }
+  &__heading {
+    font-size: 3.8rem;
+    text-transform: uppercase;
+  }
+}

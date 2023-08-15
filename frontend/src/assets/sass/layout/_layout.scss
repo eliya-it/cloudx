@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+}
+.content {
+  max-width: 100rem;
+  margin: 0 auto;
+  margin-top: 12rem;
+  padding: 3.2rem;
+  flex: 1;
+  // transition: var(--transition-primary);
+  // &--scale {
+  //   transform: scale(0.8);
+  // }
+}
+.overlay {
+  position: fixed;
+  z-index: 100;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  background-color: rgba(#292929, 0.85);
+  backdrop-filter: blur(0.6rem);
+  transform: translateX(100vw);
+  transition: var(--transition-primary);
+  &--active {
+    transform: translateX(0);
+  }
+}

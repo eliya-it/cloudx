@@ -1,0 +1,31 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+  @media only screen and (max-width: $bp-tab-land) {
+    font-size: 56.25%; //1 rem = 9px, 9/16 = 50%
+  }
+  @media only screen and (max-width: $bp-tab-port) {
+    font-size: 50%; //1 rem = 8px, 8/16 = 50%
+  }
+  @media only screen and (min-width: $bp-big-desktop) {
+    font-size: 75%;
+  }
+}
+
+body {
+  box-sizing: border-box;
+  overflow-x: hidden;
+  background-color: var(--bg);
+  color: var(--rl-color);
+}
+
+.select {
+  font-size: 2rem;
+}

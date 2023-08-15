@@ -1,0 +1,13 @@
+.change {
+  padding: 8rem 0;
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--color-grey-light-3);
+  }
+  &__icon {
+    font-size: 6.2rem;
+    color: var(--color-granted);
+  }
+  &__heading {
+    font-size: 3.2rem;
+  }
+}

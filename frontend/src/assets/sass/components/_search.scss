@@ -1,0 +1,67 @@
+.search {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between !important;
+
+  margin-bottom: 3.8rem;
+  @media only screen and (max-width: $bp-tab-port) {
+    margin-top: 8.4rem;
+  }
+  &__form {
+    @include flexCenter;
+    margin-bottom: 6.4rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.8rem;
+    &__input {
+      padding: 0.5rem 1rem;
+      @media only screen and (max-width: $bp-tab-land) {
+        padding: 1rem 1rem;
+      }
+      @media only screen and (max-width: $bp-tab-port) {
+        padding: 2.2rem 1rem;
+      }
+      width: 100%;
+      height: 4.6rem;
+      // height: 8.4rem;
+      margin-left: -3.4rem;
+      border: none;
+      box-shadow: 0 2rem 4rem rgba(#000, 0.1);
+      border-radius: var(--border-radius);
+      color: currentColor;
+      border: 3px solid var(--el-border) transparent;
+      font-size: var(--font-size);
+      transition: var(--transition-primary);
+      // text-align: end;
+      &:last-child {
+        grid-column: 1 /-1;
+        margin-top: 1.2rem;
+      }
+      &:placeholder-shown {
+        color: currentColor;
+        // color: inherit;
+        // font-family: var(--font-family);
+      }
+      &::-webkit-search-cancel-button {
+        display: none;
+      }
+      &:focus {
+        // color: inherit;
+        // font-family: var(--font-family);
+        outline: none;
+        border: 3px solid var(--el-border) var(--color-primary);
+        color: currentColor;
+      }
+    }
+  }
+  &__btn {
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+    color: var(--color-grey-dark-4);
+  }
+  &__contaienr {
+  }
+  &__result {
+  }
+}

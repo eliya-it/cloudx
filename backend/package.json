@@ -1,0 +1,41 @@
+{
+  "name": "online-archiving",
+  "version": "1.0.0",
+  "description": "this is a web-app built for online archiving doucuments",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "NODE_ENV=development nodemon server.js",
+    "start:prod": "NODE_ENV=production nodemon server.js",
+    "debug": "ndb server.js",
+    "watch:js": "parcel watch ./public/js/index.js  --out-file ./publc/js/bundle.js",
+    "build:js": "parcel build ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
+  },
+  "author": "Markov",
+  "license": "ISC",
+  "dependencies": {
+    "arcode": "^0.0.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^6.7.0",
+    "helmet": "^6.1.5",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.1",
+    "pdf-parse": "^1.1.1",
+    "pug": "^3.0.2",
+    "qrcode": "^1.5.3",
+    "sharp": "^0.32.1",
+    "slugify": "^1.6.6",
+    "speakeasy": "^2.0.0",
+    "xss-clean": "^0.1.1"
+  }
+}

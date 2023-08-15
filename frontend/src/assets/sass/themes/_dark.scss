@@ -1,0 +1,15 @@
+.dark {
+  color: var(--color-grey-light-4) !important;
+  background: var(--bg-dark-1) !important;
+  .navbar,
+  .sidebar {
+    background: var(--bg-dark-2) !important;
+    color: var(--color-grey-light-2) !important;
+  }
+  .search__form__input {
+    background: var(--bg-dark-3) !important;
+  }
+  // .form__input {
+  //   background: var(--bg-dark-3) !important;
+  // }
+}
