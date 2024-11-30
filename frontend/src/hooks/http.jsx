@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios";
 import React, { useCallback, useReducer, useState } from "react";
 const initialState = {
   loading: false,
@@ -50,7 +50,7 @@ const useHttp = () => {
       headers = {
         ...headers,
         Authorization:
-          "Bearer " + JSON.parse(localStorage.getItem("userData"))?.token,
+          "Bearer " + JSON.parse(localStorage.getItem("user"))?.token,
       };
     dispatchHttp({ type: "SEND" });
     axios({
@@ -60,13 +60,13 @@ const useHttp = () => {
       headers,
     })
       .then((resBody) => {
-        console.log(resBody.data.data);
-        dispatchHttp({
-          type: "RESPONSE",
-          resBody: resBody.data,
-          status: resBody.data.status,
-        });
-        console.log(resBody.data);
+        if (resBody.data !== undefined || null) {
+          dispatchHttp({
+            type: "RESPONSE",
+            resBody: resBody.data,
+            status: resBody.data.status,
+          });
+        }
       })
       .catch((error) => {
         console.error(error);

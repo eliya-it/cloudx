@@ -37,7 +37,7 @@ const AddUser = (props) => {
     const passwordConfirm = document.getElementById(
       "userPasswordConfirm"
     ).value;
-    sendRequest("http://127.0.0.1/api/users/signup", "POST", true, {
+    sendRequest("users/signup", "POST", true, {
       name,
       email,
       password,

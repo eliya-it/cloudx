@@ -1,12 +1,11 @@
 .error {
-  align-self: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 60rem;
+  // align-self: center;
+  @include flexCol;
+  text-align: center;
+
   margin: 0 auto;
   padding: 3.4rem 3.2rem;
-  box-shadow: 0 2rem 4rem rgba(#000, 0.1);
+  // box-shadow: 0 2rem 4rem rgba(#000, 0.1);
   border-radius: var(--border-radius);
   gap: 1.3rem;
   &__heading {

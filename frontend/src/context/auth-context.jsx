@@ -1,12 +1,38 @@
-import React from "react";
+import { createContext, useEffect, useReducer } from "react";
 
-const authContext = React.createContext({
-  authnticated: false,
-  token: null,
-  userId: null,
-  userPhoto: null,
-  login: () => {},
-  logout: () => {},
-});
-
-export default authContext;
+export const AuthContext = createContext();
+const authReducer = (state, action) => {
+  switch (action.type) {
+    case "LOGIN":
+      return {
+        user: action.user,
+      };
+    case "LOGOUT":
+      return {
+        user: null,
+      };
+    case "UPDATE":
+      return {
+        user: action.user,
+      };
+    default:
+      return state;
+  }
+};
+export const AuthContextProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(authReducer, {
+    user: null,
+  });
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      dispatch({ type: "LOGIN", user });
+    }
+  }, []);
+  console.log("Auth State: ", state);
+  return (
+    <AuthContext.Provider value={{ ...state, dispatch }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

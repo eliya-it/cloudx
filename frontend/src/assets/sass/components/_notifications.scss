@@ -1,0 +1,30 @@
+.notifications {
+  position: fixed;
+  z-index: 100;
+  @include flexCol;
+  gap: 1.2rem;
+
+  &__notification {
+    padding: 3.2rem;
+    color: var(--color-grey-light-1);
+    border-radius: var(--border-radius);
+    font-size: 2rem;
+    font-weight: var(--font-weight-3);
+    @include flexCenter;
+    cursor: pointer;
+
+    gap: 1.6rem;
+    &--success {
+      background-color: var(--color-granted);
+    }
+    &--error {
+      background-color: var(--color-warn);
+    }
+    &__btn {
+      background-color: transparent;
+      border: none;
+      color: currentColor;
+      cursor: pointer;
+    }
+  }
+}

@@ -7,7 +7,7 @@ const getPDF = async (file) => {
     // return pdfExtract.text;
     console.log("File content: ", pdfExtract.text);
     console.log("Total pages: ", pdfExtract.numpages);
-    console.log("All content: ", pdfExtract.info);
+    "All content: ", pdfExtract.info);
   } catch (error) {
     throw new Error(error);
   }

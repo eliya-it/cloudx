@@ -1,6 +1,6 @@
 .sidebar {
   flex: 0 0 18%;
-  background-color: currentColor;
+  background-color: var(--color-grey-light-1);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -49,7 +49,7 @@
     &--active {
       // font-weight: var(--font-weight-2);
       background-color: var(--color-primary);
-      color: var(--color-grey-light-4);
+      color: var(--color-grey-light-1) !important;
     }
   }
   &__link {

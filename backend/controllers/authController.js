@@ -17,7 +17,7 @@ const createSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
   const cookieOpts = {
     expiresIn: new Date(
-      Date.now() + process.env.JWT_EXPIRES_IN * 24 * 60 * 60 * 1000
+      Date.now() + process.env.JWT_EXPIRES_IN * 24 * 60 * 60 * 1000 // 1d
     ),
     httpOnly: true,
   };
@@ -29,9 +29,10 @@ const createSendToken = (user, statusCode, req, res) => {
     role: user.role,
     name: user.name,
     isTwoFa: user.isTwoFa,
+    photo: user.photo,
   });
 };
-exports.addUser = catchAsync(async (req, res, next) => {
+exports.signup = catchAsync(async (req, res, next) => {
   const activeToken = crypto.randomBytes(32).toString("hex");
   const hashedToken = crypto
     .createHash("sha256")
@@ -40,12 +41,14 @@ exports.addUser = catchAsync(async (req, res, next) => {
   const user = await User.create({
     name: req.body.name,
     email: req.body.email,
+    username: req.body.username,
     department: req.body.department,
     password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm,
+    confirmPassword: req.body.confirmPassword,
     activeToken: hashedToken,
+    addedBy: undefined,
   });
-  console.log(user);
+
   const activeURL = `http://127.0.0.1:3000/api/v1/users/active/${hashedToken}`;
   console.log(activeURL);
   user.password = undefined;
@@ -123,7 +126,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(" ")[1];
   }
-
+  console.log(token);
   if (!token)
     return next(
       new AppError("You are not logge in! Please login to have access.", 403)
@@ -219,7 +222,7 @@ exports.verifyTwoFactorAuth = catchAsync(async (req, res, next) => {
   const curUser = await User.findOne({
     sendTwoFactorRequestToken: req.body.accessToken,
   }).select("+twoFactorAuthSecret");
-  console.log(curUser);
+
   const otpToken = curUser.twoFactorAuthSecret;
   const { otp } = req.body;
 
@@ -240,18 +243,22 @@ exports.verifyTwoFactorAuth = catchAsync(async (req, res, next) => {
   createSendToken(curUser, 200, req, res);
 });
 exports.verfiyTwoFactorStatus = catchAsync(async (req, res, next) => {
-  console.log(req.body);
-  const curUser = await User.findOne({
-    sendTwoFactorRequestToken: req.body.accessToken,
-  }).select("+twoFactorAuthSecret");
+  const curUser = await User.findById(req.user._id).select(
+    "+twoFactorAuthSecret"
+  );
+  console.log("---------------\n");
+  console.log(curUser, req.body);
+  console.log("---------------\n");
+
   const otpToken = curUser.twoFactorAuthSecret;
+
   const { otp } = req.body;
 
   const token =
     speakeasy.totp({
       secret: otpToken,
     }) * 1;
-  console.log(otp, token);
+  console.log(otp * 1, token);
   if (token !== otp * 1)
     return res.status(400).json({
       status: "fail",
@@ -263,4 +270,53 @@ exports.verfiyTwoFactorStatus = catchAsync(async (req, res, next) => {
     validateBeforeSave: false,
   });
   createSendToken(curUser, 200, req, res);
+});
+exports.validateToken = catchAsync(async (req, res, next) => {
+  console.log(req.body);
+  // Token Handler
+  if (!req.body.token)
+    return next(new AppError("Token has expired. Please login again!"));
+  const decoded = await promisify(jwt.verify)(
+    req.body.token,
+    process.env.JWT_SECRET
+  );
+  const user = await User.findById(decoded.id);
+  console.log(user.activeFor);
+  if (!user)
+    return next(new AppError("Token has expired. Please login again!"));
+  // Handle activeFor
+  if (Date.now() > user.activeFor) {
+    user.isActive = false;
+    await user.save({
+      validateBeforeSave: false,
+    });
+    console.log("Deactivating users...");
+    return next(
+      new AppError(
+        "your account has been expired, contact an admin to activate it for you!"
+      )
+    );
+  }
+  res.status(200).json({
+    status: "success",
+    message: "Login in successed",
+  });
+});
+exports.createUser = catchAsync(async (req, res, next) => {
+  const { name, email, password, confirmPassword, username, from } = req.body;
+  const newUser = await User.create({
+    name,
+    email,
+    password,
+    confirmPassword,
+    username,
+    addedBy: req.user._id,
+  });
+  console.log(newUser);
+  res.status(201).json({
+    status: "success",
+    data: {
+      user: newUser,
+    },
+  });
 });

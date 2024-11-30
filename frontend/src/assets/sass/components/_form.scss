@@ -12,6 +12,10 @@
   //   width: 90%;
   //   margin: 0 auto;
   // }
+  &__note {
+    font-size: 1.4rem;
+    color: var(--color-primary-dark-1);
+  }
   &--center {
     padding: 3.2rem;
     max-width: 50rem;
@@ -27,13 +31,15 @@
   &__label {
     font-size: 1.8rem;
     font-weight: var(--font-weight-3);
-    display: block;
+
     margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
   }
   &__textarea,
   &__input {
+    border: 3px solid transparent;
     transition: var(--transition-primary);
-
     &--hidden {
       display: none;
     }
@@ -45,8 +51,8 @@
     }
     &:focus {
       outline: none;
-      // border: 1px solid var(--color-primary);
-      background-color: var(--color-grey-light-1);
+      border: 2px solid var(--color-primary-dark-1) !important;
+      transition: all 500ms ease;
       color: currentColor;
       box-shadow: 0 1rem 2rem rgba(#000, 0.1);
     }
@@ -54,7 +60,7 @@
       border: 3px solid var(--el-border) var(--color-warn);
     }
     &::placeholder {
-      color: currentColor;
+      color: var(--color-grey-light);
     }
     &:placeholder-shown {
       color: currentColor;
@@ -98,6 +104,9 @@
   &__textarea {
     height: 18rem;
     max-width: 100%;
+    min-width: 100%;
+
+    transition: none;
   }
   &__message {
     color: var(--color-warn);
@@ -106,6 +115,15 @@
     margin-top: 0.4rem;
     position: absolute;
     top: 100%;
+  }
+  &__input,
+  &__textarea,
+  &__input-label,
+  &__select {
+    &:focus {
+      outline: none;
+      transition: all 500ms ease;
+    }
   }
 }
 // input[type="password"] {

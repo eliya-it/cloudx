@@ -1,4 +1,5 @@
-import axios from "axios";
+import { Navigate } from "react-router-dom";
+import axios from "../../axios";
 import * as actionTypes from "./actionTypes";
 
 export const authStart = () => {
@@ -6,7 +7,19 @@ export const authStart = () => {
     type: actionTypes.AUTH_START,
   };
 };
-export const authSuccess = (token, isTwoFa, accessToken, curIndex, status) => {
+export const authSuccess = (
+  status,
+  token,
+  isTwoFa,
+  accessToken,
+
+  userId,
+  name,
+  photo,
+  curIndex,
+  role,
+  isAuth
+) => {
   return {
     type: actionTypes.AUTH_SUCCESS,
     token,
@@ -14,6 +27,11 @@ export const authSuccess = (token, isTwoFa, accessToken, curIndex, status) => {
     isTwoFa,
     accessToken,
     status,
+    userId,
+    name,
+    photo,
+    role,
+    isAuth,
   };
 };
 export const authFail = (error) => {
@@ -22,54 +40,93 @@ export const authFail = (error) => {
     error,
   };
 };
+export const logoutState = (state) => {
+  return {
+    type: actionTypes.LOGOUT,
+    ...state,
+  };
+};
 export const auth = (email, password) => {
   return (dispatch) => {
     dispatch(authStart());
     axios
-      .post("http://127.0.0.1/api/users/login", {
-        email,
-        password,
-      })
-
+      .post(`/users/login`, { email, password })
       .then((resBody) => {
-        console.log(resBody.data);
-        if (resBody.data.status === "success") {
-          console.log("[+] Login Successed");
-          dispatch(
-            authSuccess(
-              resBody.data.token,
-              resBody.data.isTwoFa,
-              resBody.data.sendTwoFactorRequestToken,
-              1,
-              resBody.data.status
-            )
-          );
-          localStorage.setItem(
-            "userData",
-            JSON.stringify({
-              name: resBody.data.name,
-              token: resBody.data.token,
-              photo: resBody.data.photo,
-              role: resBody.data.role,
-              // expiresIn: Date.now() + 3 * 1000 * 60 * 60 * 24,
-              expiresIn: Date.now() + 20 * 1000,
-            })
-          );
-        }
+        const expiresIn = new Date(new Date().getTime() + 2000);
+
+        const {
+          userId,
+          status,
+          token,
+          isTwoFa,
+          sendTwoFactorRequestToken,
+          name,
+          photo,
+          role,
+        } = resBody.data;
+
         dispatch(
           authSuccess(
-            resBody.data.token,
-            resBody.data.isTwoFa,
-            resBody.data.sendTwoFactorRequestToken,
+            status,
+            token,
+            isTwoFa,
+            null,
+            userId,
+            name,
+            photo,
             1,
-            resBody.data.status
+            role
           )
         );
       })
       .catch((err) => {
-        console.error(err);
-        dispatch(authFail(err.response.data.message));
+        console.error(err?.response.data);
+        dispatch(authFail(err?.response.data.message));
       });
+  };
+};
+export const signup = (name, email, password, confirmPassword) => {
+  return (dispatch) => {
+    dispatch(authStart());
+    axios
+      .post(`/users/signup`, {
+        name,
+        email,
+        password,
+        confirmPassword,
+      })
+      .then((resBody) => {
+        const expiresIn = new Date(new Date().getTime() + 2000);
+        const {
+          userId,
+          status,
+          token,
+          isTwoFa,
+          sendTwoFactorRequestToken,
+          name,
+          photo,
+        } = resBody.data;
+        dispatch(
+          authSuccess(
+            status,
+            token,
+            isTwoFa,
+            sendTwoFactorRequestToken,
+            userId,
+            name,
+            photo
+          )
+        );
+      })
+      .catch((err) => {
+        console.error(err?.response.data);
+        dispatch(authFail(err?.response.data.message));
+      });
+  };
+};
+export const logout = () => {
+  return (dispatch) => {
+    dispatch(logoutState());
   };
 };
 export const checkAuth = () => {

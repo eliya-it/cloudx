@@ -9,6 +9,7 @@ const Dashboard = (props) => {
       <ChangeUserInfo />
       {/* Change Password */}
       <ChangeUserPassword />
+      {/* Delete user account */}
     </div>
   );
 };

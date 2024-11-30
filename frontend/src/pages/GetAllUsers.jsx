@@ -22,18 +22,15 @@ const GetAllUsers = (props) => {
   const [confirm, setConfirm] = useState(false);
   const [curUser, setCurUser] = useState({});
   useEffect(() => {
-    getAllUsers("http://127.0.0.1/api/users", "GET", true);
+    getAllUsers("/users", "GET", true);
   }, [confirm]);
   const deactivateUserHandler = useCallback(async (user, userStatus) => {
-    sendDeactiveStatus(
-      `http://127.0.0.1/api/users/deactivateUser/${user._id}`,
-      "PATCH",
-      true,
-      { isActive: !user.isActive }
-    );
+    sendDeactiveStatus(`/users/deactivateUser/${user._id}`, "PATCH", true, {
+      isActive: !user.isActive,
+    });
     setConfirm(false);
   }, []);
-
+  console.log(data);
   return (
     <React.Fragment>
       {confirm ? (
@@ -62,7 +59,7 @@ const GetAllUsers = (props) => {
           </tr>
         </thead>
         <tbody className="table__body">
-          {data?.users.map((user) => {
+          {data?.data.users.map((user) => {
             return (
               <tr className="table__row" key={user._id}>
                 <th className="table__doc">{user.name}</th>

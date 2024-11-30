@@ -10,15 +10,13 @@ const ChangeUserPassword = () => {
     e.preventDefault();
     const curPassword = document.getElementById("curPassword").value;
     const newPassword = document.getElementById("newPassword").value;
-    console.log(curPassword);
     const newPasswordConfirm =
       document.getElementById("newPasswordConfirm").value;
-    sendRequest("http://127.0.0.1/api/users/updatePassword", "PATCH", true, {
+    sendRequest("/users/updatePassword", "PATCH", true, {
       curPassword,
       newPassword,
       newPasswordConfirm,
     });
-    console.log(data);
     // sendPasswords("http://127.0.0.1/api/users/updatePassword", "PATCH", true, {
     //   curPassword: 12343534,
     //   // newPassword,
@@ -26,12 +24,9 @@ const ChangeUserPassword = () => {
     // });
   };
   useEffect(() => {
-    console.log(
-      Date.now() > JSON.parse(localStorage.getItem("userData")).expiresIn
-    );
     if (status) {
       localStorage.setItem(
-        "userData",
+        "userAuth",
         JSON.stringify({
           name: data.name,
           token: data.token,
@@ -43,9 +38,9 @@ const ChangeUserPassword = () => {
   }, [data]);
   return (
     <div className="change">
-      {error ? (
+      {/* {error ? (
         <Message text={String(error?.response.data.message)} err={true} />
-      ) : null}
+      ) : null} */}
       {status ? <Message text="تم تحديث كلمة السر بنجاح!" /> : null}
       <form className="form" action="#" onSubmit={updatePasswordHandler}>
         <Input

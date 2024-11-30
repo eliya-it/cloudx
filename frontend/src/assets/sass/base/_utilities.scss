@@ -33,6 +33,8 @@
 .u-list {
   display: flex;
   list-style: none;
+  // align-items: center;
+  justify-content: center;
   &--col {
     flex-direction: column;
   }
@@ -110,7 +112,4 @@
     align-items: center;
     justify-content: center;
   }
-}
-.error {
-  border: 3px solid var(--el-border) var(--color-warn);
 }

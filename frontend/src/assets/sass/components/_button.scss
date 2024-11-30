@@ -23,12 +23,25 @@
       transform: scale(0.95);
     }
   }
+  &--primary {
+    background-color: rgba(#abd3f7, 0.5);
+    color: var(--color-primary-dark-1);
+  }
   &--warn {
     background-color: var(--color-warn);
     color: var(--color-grey-light-1);
   }
   &--green {
-    background-color: var(--color-granted);
+    background-color: rgba(#0ca678, 0.3);
+    color: var(--color-granted);
+  }
+  &--logout {
+    background-color: var(--color-warn);
     color: var(--color-grey-light-1);
+    border-radius: 0px !important;
+    flex: 1;
+    align-self: center;
+    justify-self: center;
+    text-align: center;
   }
 }

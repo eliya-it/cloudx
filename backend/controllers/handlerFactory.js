@@ -1,16 +1,30 @@
 const catchAsync = require("../utils/catchAsync");
-const APIFeatures = require("../utils/APIFeatures");
 const AppError = require("../utils/appError");
+const APIFeatures = require("../utils/apiFeatures");
+
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
     console.log(req.body);
-    let filterdBody = {};
-    if (req.user?.id) filterdBody = { ...req.body, user: req.user.id };
-    console.log(filterdBody);
-    const doc = await Model.create(filterdBody);
+    const doc = await Model.create(req.body);
     res.status(201).json({
       status: "success",
-      message: "Document was created successfully!",
+      message: "Document created successfully!",
+      data: {
+        doc,
+      },
+    });
+  });
+exports.getOne = (Model, populateOpts, isSlug) =>
+  catchAsync(async (req, res, next) => {
+    let query = await Model.findById(req.params.id);
+    if (isSlug) query = await Model.findOne({ slug: req.params.slug });
+    if (populateOpts) query = query.populate(populateOpts);
+    const doc = await query;
+    if (!doc) {
+      return next(new AppError("No doc found with that ID!", 404));
+    }
+    res.status(200).json({
+      status: "success",
       data: {
         doc,
       },
@@ -18,81 +32,65 @@ exports.createOne = (Model) =>
   });
 exports.deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    console.log(req.params.id);
     const doc = await Model.findByIdAndDelete(req.params.id);
+    console.log(req.params.id);
+
+    console.log(doc);
     if (!doc) {
-      return console.error("There is no doc with this id!");
+      return next(new AppError("No doc found with that ID!", 404));
     }
     res.status(204).json({
       status: "success",
       data: null,
     });
   });
-
 exports.updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    console.log(req.params, req.body);
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
+
     if (!doc) {
-      return next(new AppError("There is no doc with this id!", 404));
+      return next(new AppError("No document found with that ID", 404));
     }
     res.status(200).json({
       status: "success",
       data: {
-        doc,
+        data: doc,
       },
     });
   });
-exports.getOne = (Model, popOptions) =>
-  catchAsync(async (req, res, next) => {
-    let query = Model.findById(req.params.id);
-    if (popOptions) query = query.populate(popOptions);
-    const doc = await query;
-    if (!doc) return next(new AppError("There is no doc with this id!", 404));
-    console.log("[++] Getting user");
-    res.status(200).json({
-      status: "success",
-      data: {
-        doc,
-      },
-    });
-  });
-exports.getAll = (Model) =>
-  catchAsync(async (req, res, next) => {
-    let searchByTitle;
 
+exports.getAll = (Model, payload = null) =>
+  catchAsync(async (req, res, next) => {
     let payload;
-    if (payload) payload = req.body.payload.trim();
+    if (payload) {
+      payload = req.body.payload.trim();
+    }
     let filter = {};
-    console.log(req.query.section);
-    if (req.params.bookId) filter = { book: req.params.bookId };
-    if (req.query.search) {
-      searchByTitle = req.query.search;
-      filter = { title: req.query.search };
-    }
-    if (req.query.section) {
-      // searchByTitle = req.query.search;
-      filter = { section: req.query.section };
-    }
-    if (req.user.role === "user") {
-      filter = { ...filter, isPrivate: { $eq: false } };
-    }
-    // if (req.query.empName) {
-    //   console.log("[+] calling getByEmpName()");
-    //   filter = { ...filter, forEmp: req.query.empName };
-    // }
+    if (req.params.roomId) filter = { room: req.params.roomId };
+    // filter = { ...filter, name: { $regex: /Co/i } };
     console.log(filter);
-    const apiFeatures = new APIFeatures(Model.find(filter), req.query)
-
+    const features = new APIFeatures(
+      // Model.find({ name: { $regex: /Co/, $options: "i" } }),
+      // {$text: {$search: "Co"}}
+      Model.find(filter),
+      req.query
+    )
+      .search()
       .filter()
       .sort()
-      .pagination();
+      .limitFields()
+      .pagination()
+      .searchByUser()
 
-    // .multiSections();
+      .searchByNumber()
+      .searchBySection()
+      .searchByDate();
 
-    const docs = await apiFeatures.query;
+    const docs = await features.query;
     console.log(docs);
     res.status(200).json({
       status: "success",

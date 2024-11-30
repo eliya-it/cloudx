@@ -1,13 +1,20 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
 
-const Error = (props) => {
+const Error = ({ err, text, redirectTo }) => {
+  let timer;
   return (
     <div
       className={`message ${
-        props.err ? "message--fail" : "message--success"
+        err ? "message--fail" : "message--success"
       } u-center-text`}
     >
-      <p>{props.text || props.error?.response.data.message}</p>
+      <p>{text || error?.response.data.message}</p>
+      {redirectTo && clearTimeout(timer)
+        ? (timer = setTimeout(() => {
+            <Navigate to={String(redirectTo)} />;
+          }, 1500))
+        : ""}
     </div>
   );
 };

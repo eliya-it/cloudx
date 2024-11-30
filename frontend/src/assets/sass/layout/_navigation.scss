@@ -1,6 +1,7 @@
 .navbar {
-  background-color: var(--bg-light-2);
-  padding: 1.4rem;
+  background-color: var(--color-grey-light-1);
+  border-bottom: 1px solid var(--color-grey-light-2);
+  padding: 1.4rem 2rem;
   @include flexCenter;
   @include flexSpread;
   position: fixed;
@@ -83,7 +84,7 @@
     &__name {
       font-size: 2rem;
       font-weight: var(--font-weight-2);
-      color: var(--color-grey-light-1);
+      color: var(--color-grey-dark-1);
     }
   }
 }

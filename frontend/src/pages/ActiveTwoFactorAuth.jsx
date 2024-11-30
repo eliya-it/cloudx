@@ -11,15 +11,14 @@ const ActiveTwoFactorAuth = () => {
   const status = error?.response.data.status;
   const goToSlide = function (slide) {
     const slides = document.querySelectorAll(".slide");
-    console.log(slides);
     slides.forEach(
       (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}vw)`)
     );
   };
-
+  const backArrowBtn = () => setCurIndex(0);
   useEffect(() => {
     sendRequest(
-      "http://127.0.0.1/api/users/registerTwoFactorAuth",
+      "/users/registerTwoFactorAuth",
       // "",
       "GET",
       true
@@ -28,12 +27,13 @@ const ActiveTwoFactorAuth = () => {
   useEffect(() => {
     goToSlide(curIndex);
   }, [curIndex]);
+  console.log(status);
   return (
     <div className="change slider">
       {status === "fail" ? (
         <div className="u-center-text">
           <RiCheckFill className="change__icon" />
-          <p className="change__heading">User is already activated 2fa</p>
+          <p className="change__heading">المصادقة الثنائية قيدة التشغيل!</p>
         </div>
       ) : (
         <React.Fragment>
@@ -57,7 +57,7 @@ const ActiveTwoFactorAuth = () => {
             </button>
           </div>
           <div className="slide">
-            <TwoFactorAuth />
+            <TwoFactorAuth isNew cb={backArrowBtn} />
           </div>
         </React.Fragment>
       )}

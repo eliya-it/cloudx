@@ -24,18 +24,13 @@ const GetAllDocuments = (props) => {
   const [curDocId, setCurDocId] = useState("");
 
   useEffect(() => {
-    getAllDocs("http://127.0.0.1/api/books", "GET", true);
+    getAllDocs("/files", "GET", true);
   }, [confirm]);
 
   const deleteDocHandler = useCallback((documentId) => {
-    sendDeleteRequest(
-      `http://127.0.0.1/api/books/${documentId}`,
-      "DELETE",
-      true
-    );
+    sendDeleteRequest(`/files/${documentId}`, "DELETE", true);
     setConfirm(false);
   }, []);
-  console.log(data);
   return (
     <React.Fragment>
       {" "}

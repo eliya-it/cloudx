@@ -14,10 +14,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
-  department: {
-    type: String,
-    required: [true, "يرجى ادخال قسم المستخدم!"],
-  },
+
   role: {
     type: String,
     default: "user",
@@ -28,8 +25,11 @@ const userSchema = new mongoose.Schema({
     minLength: 8,
     select: false,
   },
-
-  passwordConfirm: {
+  type: {
+    type: String,
+    default: "individual",
+  },
+  confirmPassword: {
     type: String,
     required: [true, "يرجى تأكيد كلمة السر!"],
     minLength: 8,
@@ -41,11 +41,15 @@ const userSchema = new mongoose.Schema({
       message: "عذراَ, كلمة السر غير مطابقة!",
     },
   },
+  addedBy: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+  },
   photo: {
     type: String,
     default: "user.png",
   },
-  isTwoFa: {
+  isTwoSteps: {
     type: Boolean,
     default: false,
   },
@@ -57,9 +61,13 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-  role: {
+  username: {
     type: String,
-    default: "user",
+    required: [true, "A user must have a username"],
+  },
+  freeTrial: {
+    type: Date,
+    default: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
   },
   twoFactorAuthSecret: {
     type: String,
@@ -71,12 +79,17 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: Date,
   sendTwoFactorRequestToken: String,
   passwordChangedAt: Date,
+  activeFor: {
+    type: Date,
+    // default: new Date(Date.now() + 1000 * 60 * 60 * 24 * 31 * 12),
+    default: new Date(Date.now() + 1000 * 60),
+  },
 });
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 13);
-  this.passwordConfirm = undefined;
+  this.confirmPassword = undefined;
   next();
 });
 userSchema.pre("save", async function (next) {
@@ -84,6 +97,10 @@ userSchema.pre("save", async function (next) {
   this.passwordChangedAt = Date.now() - 1000;
   next();
 });
+// userSchema.pre("save", async function (next) {
+//   this.passwordChangedAt = Date.now() - 1000;
+//   next();
+// });
 userSchema.methods.correctPassword = async function (
   canidatePassword,
   userPassword
@@ -112,7 +129,12 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   // False means NOT changed
   return false;
 };
-
+userSchema.pre(/^find/, function () {
+  this.populate({
+    path: "addedBy",
+    select: "name email",
+  });
+});
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

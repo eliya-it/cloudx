@@ -9,10 +9,7 @@ import {
 } from "react-icons/md";
 const SearchResult = (props) => {
   return (
-    <Link
-      className="search-results__result"
-      to={`http://localhost:5173/book/${props.id}`}
-    >
+    <Link className="search-results__result" to={`/book/${props.id}`}>
       <p className="search-results__result__heading">{props.name}</p>
       <ul className="search-results__result__info">
         <li className="u-list__item">

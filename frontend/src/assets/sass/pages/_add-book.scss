@@ -1,2 +1,19 @@
 .add-book {
+  &__form {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    &__textarea {
+      width: 100%;
+      grid-column: 1 / -1;
+      min-width: 100%;
+    }
+    &__btn {
+      grid-column: 1 / -1;
+
+      align-items: center;
+      //   justify-self: center;
+    }
+  }
 }

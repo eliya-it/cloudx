@@ -9,7 +9,6 @@ const Modal = (props) => {
   const toggleHandler = () => {
     setToggleModal(false);
   };
-  console.log(hideModalAnimation);
   return (
     <React.Fragment>
       {toggleModal ? (

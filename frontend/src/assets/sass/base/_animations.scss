@@ -28,6 +28,16 @@
     opacity: 0.8;
   }
 }
+@keyframes fromBottomFade {
+  from {
+    transform: translateY(15rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 .rad {
   animation: blink 1s linear infinite;
 }

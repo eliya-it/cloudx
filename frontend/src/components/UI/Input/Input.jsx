@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 
 const Input = (props) => {
-  const { min = 6, max = 32, validationMsg, type, onChange } = props;
+  const {
+    min = 6,
+    max = 32,
+    validationMsg,
+    type,
+    onChange,
+    containerClassName,
+    isRequired,
+  } = props;
   const [errMsg, setErrMsg] = useState("");
   const checkValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
@@ -26,11 +34,24 @@ const Input = (props) => {
           {options.map((opt) => (
             <option value={opt.value} key={opt.value}>
               {opt.label}
+              {isRequired ? <strong>{"*"}</strong> : ""}
             </option>
           ))}
         </select>
       );
     }
+    if (type === "textarea") {
+      return (
+        <textarea
+          className={`form__textarea${props.className ? props.className : ""}`}
+          name=""
+          id=""
+          cols="30"
+          rows="10"
+        ></textarea>
+      );
+    }
+
     return (
       <input
         className={` ${props.className ? props.className : ""} form__input`}
@@ -40,21 +61,28 @@ const Input = (props) => {
         onChange={props.onChange || inputValueHandler}
         minLength={min}
         maxLength={max}
-        defaultValue={props.value || null}
+        defaultValue={props.value || ""}
         required
       />
     );
   };
   let inputEl = getInputType("text", props.id);
   if (props.type === "email") inputEl = getInputType("email", props.id);
+  if (props.type === "date") inputEl = getInputType("date", props.id);
+  if (props.type === "textarea") inputEl = getInputType("textarea", props.id);
   else if (props.type === "password")
     inputEl = getInputType("password", props.id);
   else if (props.type === "select")
     inputEl = getInputType("select", props.id, props.options);
   return (
-    <div className="form__control">
+    <div
+      className={`${
+        containerClassName ? containerClassName : ""
+      } form__control`}
+    >
       <label htmlFor={props.id} className="form__label">
         {props.label}
+        {isRequired ? <strong>{"*"}</strong> : ""}
       </label>
 
       {inputEl}

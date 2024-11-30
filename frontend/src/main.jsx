@@ -22,6 +22,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import rootReducer from "./store/reducers/index";
 import App from "./App";
 import { ThemeProvider } from "./context/theme-context";
+import { AuthContextProvider } from "./context/auth-context";
 const composeEnhancers =
   (window.__REDUX_DEVTOOLS_EXTENSION__ &&
     window.__REDUX_DEVTOOLS_EXTENSION__()) ||
@@ -70,11 +71,11 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
+      <AuthContextProvider>
         <ThemeProvider>
           <App />
         </ThemeProvider>
-      </BrowserRouter>
+      </AuthContextProvider>
     </Provider>
   </React.StrictMode>
 );

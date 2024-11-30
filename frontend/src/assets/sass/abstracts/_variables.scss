@@ -1,13 +1,15 @@
 :root {
-  --color-primary: #ee8829;
-  --color-primary-light-1: #f0943e;
-  --color-primary-light-2: #f1a054;
-  --color-primary-light-3: #f3ac69;
-  --color-primary-light-4: #f5b87f;
-  --color-primary-dark-1: #d67a25;
-  --color-primary-dark-2: #be6d21;
-  --color-primary-dark-3: #a75f1d;
-  --color-primary-dark-4: #8f5219;
+  --color-primary: #2c90ec;
+  --color-primary-light-1: #419bee;
+  --color-primary-light-2: #56a6f0;
+  --color-primary-light-3: #6bb1f2;
+  --color-primary-light-4: #80bcf4;
+  --color-primary-light-5: #96c8f6;
+  --color-primary-dark-1: #2882d4;
+  --color-primary-dark-2: #2373bd;
+  --color-primary-dark-3: #1f65a5;
+  --color-primary-dark-4: #1a568e;
+  --color-primary-dark-5: #164876;
   --color-grey-light-1: #f8f9fa;
   --color-grey-light-2: #f1f3f5;
   --color-grey-light-3: #e9ecef;
@@ -16,6 +18,8 @@
   --color-grey-dark-2: #444;
   --color-grey-dark-3: #555;
   --color-grey-dark-4: #666;
+  --color-white: #fff;
+
   --bg-dark-1: #180e04;
   --bg-dark-2: #120a02;
   --bg-dark-3: #2f261d;
@@ -29,8 +33,8 @@
 
   --color-warn: #f03e3e;
   --color-granted: #0ca678;
-  // Font Variables
-  --font-famliy: "Cairo", Arial, sans-serif;
+  // Font Variablesfont-family: 'Roboto', sans-serif;
+  --font-famliy: "Roboto", Arial, sans-serif;
   --font-weight-1: 400;
   --font-weight-2: 500;
   --font-weight-3: 600;

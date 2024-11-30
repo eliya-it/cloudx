@@ -61,16 +61,15 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     new: true,
     runValidators: true,
   });
-  if (req.originalUrl.startsWith("/api")) {
-    return res.status(200).json({
-      status: "success",
-      data: {
-        user: updatedUser,
-      },
-    });
-  }
-  // res.redirect("/me");
+
+  return res.status(200).json({
+    status: "success",
+    data: {
+      user: updatedUser,
+    },
+  });
 });
+exports.deleteMe = factory.deleteOne(User);
 
 exports.registerTwoFactorAuth = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
@@ -100,7 +99,8 @@ exports.registerTwoFactorAuth = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const allUsers = await User.find({ id: { $ne: req.user.id } });
+  // const allUsers = await User.find({ id: { $ne: req.user.id } });
+  const allUsers = await User.find();
   res.status(200).json({
     status: "success",
     results: allUsers.length,
@@ -123,4 +123,47 @@ exports.deactivateUser = catchAsync(async (req, res, next) => {
       doc,
     },
   });
+});
+const getUsersUpdate = catchAsync(async (userID, isActive) => {
+  console.log(userID);
+  const users = await User.find({ addedBy: userID });
+  await Promise.all(
+    users.map(async (user) => {
+      user.isActive = isActive;
+      await user.save({ validateBeforeSave: false });
+    })
+  );
+  console.log(users);
+});
+
+// exports.updateStatus = factory.updateOne(User);
+exports.updateStatus = catchAsync(async (req, res, next) => {
+  const isActive = req.body.isActive;
+  const curUser = await User.findById(req.params.id);
+  //  1) Get the current user
+  // 2) user.type === individual, isActive: true, activeFor: 1-year
+
+  if (curUser.type === "individual") {
+    curUser.isActive = isActive;
+    curUser.activeFor = new Date(Date.now() + 1000 * 60 * 60 * 24 * 360);
+    await curUser.save({ validateBeforeSave: false });
+    res.status(200).json({
+      status: "success",
+      data: {
+        user: curUser,
+      },
+    });
+  }
+  // 3) user.type === org, isActive: true,usersRealtedToHim: true, activeFor: 1-year (for his users also)
+  else if (curUser.type === "org") {
+    curUser.isActive = isActive;
+    await curUser.save({ validateBeforeSave: false });
+
+    // 1) get all users assoicated with this user
+    getUsersUpdate(curUser._id, isActive);
+    res.status(200).json({
+      status: "success",
+    });
+    // 2) Set thier isActive:, activeFor, as the same as this user
+  }
 });

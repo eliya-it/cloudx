@@ -1,58 +1,89 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useHttp from "../../hooks/http";
 import Input from "../UI/Input/Input";
 import Message from "../Message/Message";
 import Button from "../UI/Button/Button";
 import InputBox from "../UI/Form/Input/InputBox/InputBox";
 import { RiMailSettingsFill, RiUserFill } from "react-icons/ri";
-
-const ChangeUserInfo = (props) => {
+import { connect } from "react-redux";
+import * as actions from "../../store/actions/index";
+import axios from "../../axios";
+import useUpdate from "../../hooks/useUpdate";
+import ErrorHandler from "../UI/ErrorHandler/ErrorHandler";
+import { FULL_PATH } from "../../config";
+const ChangeUserInfo = () => {
+  const [curUser, setCurUser] = useState({});
+  const [error, setError] = useState(null);
+  const { update, data } = useUpdate();
+  const [userData, setUserData] = useState(null);
   // const { sendRequest, data, error, status } = useHttp();
   const {
     sendRequest: updateUserData,
     data: updatedData,
     error: updateDataError,
     isLoading: updateUserDataLoader,
-    status,
+    status: updateStatus,
   } = useHttp();
-  const {
-    sendRequest: getUserData,
-    data: userData,
-    error: userDataErr,
-    // isLoading: getDataLoader,
-  } = useHttp();
+
   const handleInformationUpdate = (e) => {
     // try {
     e.preventDefault();
     const name = document.getElementById("updateName").value;
     const email = document.getElementById("updateEmail").value;
     const photo = document.getElementById("updatePhoto").files[0];
-
-    updateUserData(
-      "http://127.0.0.1/api/users/updateMe",
-      "PATCH",
-      true,
-      {
-        name,
-        email,
-        photo,
-      },
-      true
-    );
+    update(name, email, photo);
   };
-  const getUserInfo = useEffect(() => {
-    getUserData("http://127.0.0.1/api/users/me", "GET", true);
-  }, [updatedData]);
-  console.log(userData);
+  useEffect(() => {
+    console.log(JSON.parse(localStorage.getItem("user"))?.token);
+    axios
+      .get("/users/me", {
+        headers: {
+          Authorization:
+            "Bearer " + JSON.parse(localStorage.getItem("user"))?.token,
+        },
+      })
+      .then((res) => {
+        if (res.data.data.doc !== null) setUserData(res.data.data.doc);
+      })
+      .catch((error) => {
+        console.error(error);
+        setError(error.response.data.message);
+      });
+  }, [data]);
+  useEffect(() => {
+    // if (
+    //   localStorage.getItem("user") &&
+    //   JSON.parse(localStorage.getItem("user")).photo !==
+    //     userData?.data.doc.photo
+    // ) {
+    //   localStorage.setItem(
+    //     "user",
+    //     JSON.stringify({
+    //       name: userData?.data.doc.name,
+    //       photo: userData?.data.doc.photo,
+    //     })
+    //   );
+    //   // update(userData?.data.doc.name, userData?.data.doc.photo);
+    // }
+  }, [userData]);
+  if (updateStatus === "success") {
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        name: updatedData?.data.user.name,
+        photo: updatedData?.data.user.photo,
+      })
+    );
+  }
   return (
     <React.Fragment>
-      {" "}
+      <ErrorHandler err={error} />
       {status === "success" ? (
         <Message text="Data updated successfully!" />
       ) : null}
-      {updateDataError ? (
+      {/* {updateDataError ? (
         <Message text={updateDataError.response.data.message} err={true} />
-      ) : null}
+      ) : null} */}
       <div className="change">
         <h3 className="heading--tertiary u-margin-bottom-medium">
           تغيير المعلومات
@@ -60,16 +91,17 @@ const ChangeUserInfo = (props) => {
         <form className="form" onSubmit={handleInformationUpdate}>
           <Input
             type="text"
-            placeholder="Search for book number"
+            placeholder="أسم الحساب"
             id="updateName"
-            min="5"
             validationMsg="Your name must be 5 characters or more!"
-            value={userData?.data.doc.name}
+            value={userData?.name}
+            max={200}
           />
           <Input
             label="عنوان البريد الألكتروني"
-            id="updateEmail" //   value={data?.data.doc.email}
-            value={userData?.data?.doc.email}
+            placeholder="user@cloudex.com"
+            id="updateEmail" //   value={data.email}
+            value={userData?.email}
             type="email"
             min={12}
             max={32}
@@ -77,7 +109,7 @@ const ChangeUserInfo = (props) => {
           />
           <div className="user-photo">
             <img
-              src={`http://127.0.0.1/img/users/${userData?.data.doc.photo}`}
+              src={`${FULL_PATH}/img/users/${userData?.photo}`}
               alt="User Photo"
               className="user-photo__photo"
             />

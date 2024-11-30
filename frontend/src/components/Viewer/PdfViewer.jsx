@@ -1,27 +1,30 @@
 import React from "react";
 import pdf from "../../assets/img/pdf.pdf";
-import { Viewer } from "@react-pdf-viewer/core";
-import { Worker } from "@react-pdf-viewer/core";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { FULL_PATH } from "../../config";
 
-import "@react-pdf-viewer/core/lib/styles/index.css";
+// import "@react-pdf-viewer/core/lib/styles/index.css";
 
-const PdfViewer = (props) => {
-  console.log(props.pdf);
+const PdfViewer = ({ file }) => {
+  console.log(file);
   return (
-    <Worker
-      new
-      workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js"
+    <div
+      className="PdfViewer"
+      style={{
+        borderBottom: "1px solid #cccc",
+        height: "750px",
+      }}
     >
-      <div
-        className="PdfViewer"
+      <iframe
+        src={`${FULL_PATH}/documents/${file}`}
         style={{
-          borderBottom: "1px solid #cccc",
-          height: "750px",
+          // borderBottom: "1px solid #cccc",
+          border: "none",
+          height: "100%",
+          width: "100%",
         }}
-      >
-        <Viewer fileUrl={String(props.pdf)} />
-      </div>
-    </Worker>
+      />
+    </div>
   );
 };
 

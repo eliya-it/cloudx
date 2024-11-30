@@ -10,9 +10,15 @@
 @import "components/button";
 
 @import "components/form";
+@import "components/admin-chart";
+@import "components/admin-sidebar";
+@import "components/slider";
+@import "components/notifications";
+@import "components/icon";
 @import "components/popup";
 @import "components/sidebar";
 @import "components/search";
+@import "components/quick-nav";
 @import "components/search-results";
 @import "components/user-photo";
 @import "components/change";
@@ -35,6 +41,7 @@
 @import "layout/grid";
 @import "layout/header";
 @import "layout/navigation";
+@import "layout/flex";
 @import "themes/dark";
 @import "themes/light";
 

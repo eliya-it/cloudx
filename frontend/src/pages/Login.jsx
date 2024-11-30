@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import * as actions from "../store/actions/index";
 import Input from "../components/UI/Input/input";
 import { connect } from "react-redux";
@@ -10,41 +10,41 @@ import Button from "../components/UI/Button/Button";
 import InputBox from "../components/UI/Form/Input/InputBox/InputBox";
 import { RiUserFill } from "react-icons/ri";
 import { Navigate } from "react-router";
-
+import { useNavigate } from "react-router-dom";
+import useLogin from "../hooks/useLogin";
 const Login = (props) => {
+  const { login, error, isLoading, twoAuthData } = useLogin();
   const [curIndex, setCurIndex] = useState(props.curIndex || 0);
-  const { sendRequest: sendLoginCreds, error, isLoading } = useHttp();
-
+  const navigate = useNavigate();
   const goToSlide = function (slide) {
     const slides = document.querySelectorAll(".slide");
-    console.log(slides);
     slides.forEach(
       (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
     );
   };
 
-  const login = useCallback(async (e) => {
+  const handleLogin = useCallback((e) => {
     e.preventDefault();
-    console.log(e.target.children);
     const email = document.getElementById("loginEmail").value;
     const password = document.getElementById("loginPassword").value;
-    props.onAuth(email, password);
+    login(email, password);
   }, []);
+
   useEffect(() => {
-    if (props.isTwoFa) setCurIndex(1);
-  }, [props.loading]);
+    if (twoAuthData.status === "pending") setCurIndex(1);
+  }, [props.loading, twoAuthData.status]);
   useEffect(() => {
     goToSlide(curIndex);
   }, [curIndex]);
 
-  if (props.status === "success") return <Navigate to="/" />;
+  // if (props.status === "success") return <Navigate to="/" />;
   return (
     <section className="slider ">
       {props.error ? <Message text={props.error} err /> : null}
       <div className="slide">
         <div className="login">
           {/* {props.error ? <Error text={props.error} err /> : null} */}
-          <form className="form login__form" onSubmit={login}>
+          <form className="form login__form" onSubmit={handleLogin}>
             <Input
               type="email"
               placeholder="user@example.com"
@@ -69,14 +69,14 @@ const Login = (props) => {
               max={32}
               validationMsg={"Your password must be 8 charcters or more!"}
             />
-            <Button loading={props.loading} text="تسجيل الدخول" />
+            <Button loading={isLoading} text="تسجيل الدخول" />
           </form>
         </div>
       </div>
       <div className="slide">
         {" "}
         <div className="2fa">
-          <TwoFactorAuth accessToken={props.accessToken} />
+          <TwoFactorAuth accessToken={twoAuthData.sendTwoFactorRequestToken} />
           <button onClick={() => setCurIndex(0)}>Back</button>
         </div>
       </div>
